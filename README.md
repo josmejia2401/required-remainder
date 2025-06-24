@@ -1,232 +1,209 @@
-````markdown
-# 📊 Required Remainder - Reto Técnico
 
-Implementación en Java 17 + Spring Boot 3.5.3 de la solución al problema [Codeforces 1374A - Required Remainder](https://codeforces.com/problemset/problem/1374/A), siguiendo arquitectura hexagonal, buenas prácticas, pruebas unitarias, validaciones, documentación Swagger y análisis de calidad de código con Jacoco y SonarQube.
+# 🚀 Required Remainder
 
----
-
-## 🚀 Tabla de contenido
-
-- [Descripción del problema](#descripción-del-problema)
-- [Arquitectura](#arquitectura)
-- [Tecnologías y dependencias](#tecnologías-y-dependencias)
-- [Cómo ejecutar el proyecto](#cómo-ejecutar-el-proyecto)
-- [Pruebas](#pruebas)
-- [Cobertura de código con Jacoco](#cobertura-de-código-con-jacoco)
-- [Validaciones](#validaciones)
-- [Documentación Swagger](#documentación-swagger)
-- [Estructura de paquetes](#estructura-de-paquetes)
-- [Ejemplo de uso](#ejemplo-de-uso)
-- [Autor](#autor)
+Microservicio en Java 17 + Spring Boot 3.5.3 que resuelve el reto “Required Remainder” (Codeforces 1374A) aplicando arquitectura hexagonal, buenas prácticas (SOLID, tests, Sonar, cobertura, documentación Swagger), listo para Docker, despliegue en AWS ECS/ECR, y fácil integración con SonarQube.
 
 ---
 
-## 📋 Descripción del problema
+## 📦 Características principales
 
-Dado un número de casos de prueba, para cada uno se reciben tres enteros: `x`, `y` y `n`.  
-Se debe calcular el mayor entero `k` tal que:
-
-- `0 ≤ k ≤ n`
-- `k mod x = y`
-
-Esto debe realizarse de forma eficiente y cumplir siempre con las restricciones del problema.
-
----
-
-## 🏛️ Arquitectura
-
-Se implementa una arquitectura **hexagonal (Ports and Adapters)**:
-
-- **Dominio**: Lógica pura y contrato (`RemainderPort`, `RemainderService`, modelos).
-- **Adaptador de entrada**: Exposición vía REST (`RemainderController`).
-- **Infraestructura**: Validación, documentación Swagger, tests, análisis de calidad.
+- Spring Boot 3.5.3, Java 17, Maven
+- Arquitectura hexagonal y código limpio (SOLID)
+- Control de errores global y validaciones con `@Valid`
+- Documentación automática de API con Swagger (springdoc-openapi)
+- Test unitarios (JUnit 5)
+- Análisis de calidad con SonarQube y SonarLint
+- Cobertura de código con Jacoco
+- Dockerfile listo para despliegue (ECS, ECR, API Gateway)
+- Infraestructura como código (Terraform, ver carpeta `infra/`)
+- Soporte para integración con CI/CD y SonarCloud
 
 ---
 
-## 🧰 Tecnologías y dependencias
+## 🚀 Ejecución local
 
-- **Java 17**
-- **Spring Boot 3.5.3**
-- **Arquitectura Hexagonal**
-- **JUnit 5** (pruebas)
-- **Mockito** (mocks)
-- **Springdoc OpenAPI** (`swagger-ui`)
-- **Jakarta Validation** (`@Valid`, `@Min`, etc.)
-- **Lombok** (opcional)
-- **Jacoco** (cobertura de pruebas)
-- **SonarQube/SonarCloud** (análisis de código)
+### 1. Requisitos
 
----
+- Java 17+
+- Maven 3.8+
+- (Opcional) Docker
+- (Opcional) SonarQube local
 
-## ⚙️ Cómo ejecutar el proyecto
-
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/josmejia2401/required-remainder.git
-   cd required-remainder
-````
-
-2. Compila y ejecuta la aplicación:
-
-   ```bash
-   mvn clean package
-   java -jar target/required-remainder-1.0.0.jar
-   ```
-
-3. El servicio REST estará disponible en:
-
-   ```
-   http://localhost:8080/api/required-remainder/batch
-   ```
-
----
-
-## 🧪 Pruebas
-
-Para ejecutar los tests:
+### 2. Clonar el proyecto
 
 ```bash
-mvn test
+git clone https://github.com/josmejia2401/required-remainder.git
+cd required-remainder
 ```
 
-Incluyen pruebas unitarias del dominio, pruebas de integración para el controlador REST, y casos para validaciones.
+### 3. Compilar y ejecutar
+
+```bash
+mvn clean package
+java -jar target/required-remainder.jar
+```
+
+Por defecto, la app se levanta en [http://localhost:8080](http://localhost:8080)
 
 ---
 
-## 📊 Cobertura de código con Jacoco
+## 📑 Documentación Swagger/OpenAPI
 
-El proyecto integra **Jacoco** para analizar la cobertura de pruebas unitarias y de integración.
+La API REST está documentada automáticamente con [springdoc-openapi](https://springdoc.org/).
 
-### Ejecutar análisis de cobertura:
+**Configuración de rutas (agrega esto a tu `application.properties` si quieres usar rutas personalizadas):**
+```properties
+springdoc.api-docs.path=/v3/api-docs
+springdoc.swagger-ui.path=/swagger-ui.html
+```
+
+- **Swagger UI:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- **OpenAPI JSON:** [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+
+---
+
+## 🧪 Tests y cobertura de código
+
+Ejecuta todos los tests y genera reporte de cobertura con Jacoco:
 
 ```bash
 mvn clean verify
 ```
 
-Al finalizar, abre el reporte HTML generado en:
-
-```
-target/site/jacoco/index.html
-```
-
-Verás un reporte visual detallado de cobertura por clase, método y línea.
-
-### Excluir archivos del análisis
-
-Si deseas excluir archivos como `Application.java` de la cobertura, la configuración del plugin Jacoco en `pom.xml` incluye:
-
-```xml
-<plugin>
-    <groupId>org.jacoco</groupId>
-    <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.8.11</version>
-    <configuration>
-        <excludes>
-            <exclude>**/Application.class</exclude>
-        </excludes>
-    </configuration>
-    <executions>
-        <execution>
-            <goals>
-                <goal>prepare-agent</goal>
-            </goals>
-        </execution>
-        <execution>
-            <id>report</id>
-            <phase>prepare-package</phase>
-            <goals>
-                <goal>report</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
-```
-
-Esto asegura que la clase principal no afecte negativamente el porcentaje de cobertura.
+El reporte HTML de Jacoco estará en `target/site/jacoco/index.html`.
 
 ---
 
-## 🛡️ Validaciones
+## 🛡️ Análisis de calidad con SonarQube (local)
 
-Los datos de entrada se validan automáticamente:
+Soporta análisis de calidad estática con SonarQube local.
 
-* **x**: mínimo 2
-* **y**: mínimo 0, menor que x
-* **n**: mínimo 0, mayor o igual a y
-
-Si los datos no cumplen las restricciones, se retorna un error `400 Bad Request` con detalles del campo inválido.
-
----
-
-## 📑 Documentación Swagger
-
-La API está completamente documentada.
-Accede a la documentación interactiva en:
-
-```
-http://localhost:8080/swagger-ui/index.html
-```
-
-Allí puedes probar la API, ver ejemplos y consultar la estructura de datos esperada.
-
----
-
-## 📁 Estructura de paquetes
-
-```
-src/main/java/com/josmejia2401/requiredremainder/
-│
-├── domain/
-│   ├── model/          # Modelos de dominio (Remainder)
-│   ├── port/           # Interfaces de dominio (RemainderPort)
-│   └── service/        # Implementaciones de dominio (RemainderService)
-│
-├── configuration/      # Beans y wiring de Spring
-│
-└── adapter/
-    └── in/
-        └── web/        # Controlador REST (RemainderController)
-```
-
----
-
-## 💻 Ejemplo de uso
-
-### **Request (JSON):**
-
-```json
-[
-  { "x": 7, "y": 5, "n": 12345 },
-  { "x": 5, "y": 0, "n": 4 }
-]
-```
-
-### **Curl:**
+### 1. Levantar SonarQube con Docker
 
 ```bash
-curl -X POST http://localhost:8080/api/required-remainder/batch \
-  -H "Content-Type: application/json" \
-  -d '[{"x":7,"y":5,"n":12345},{"x":5,"y":0,"n":4}]'
+docker run -d --name sonarqube -p 9000:9000 sonarqube:latest
 ```
 
-### **Response:**
+Accede a [http://localhost:9000](http://localhost:9000), usuario/contraseña: `admin` / `admin`
 
-```json
-[12339, 0]
+### 2. Crea un token en SonarQube
+
+- Ve a tu usuario (My Account > Security)
+- Crea y guarda un **token personal**
+
+### 3. Analiza el proyecto con Maven
+
+```bash
+mvn clean verify sonar:sonar   -Dsonar.projectKey=required-remainder   -Dsonar.host.url=http://localhost:9000   -Dsonar.token=sqa_c554752e7d1a61f05a8b15d47cb98344219cd47c
+```
+
+### 4. Integra SonarQube en IntelliJ IDEA (opcional)
+
+1. Instala el plugin **SonarLint** desde los Plugins de IntelliJ.
+2. Ve a **View > Tool Windows > SonarLint** para abrir el panel.
+3. Entra a Settings (⚙️) de SonarLint > **Connections**, añade una conexión SonarQube a `http://localhost:9000` con tu token.
+4. En **Project Settings** de SonarLint, vincula (bind) tu proyecto local al project key correspondiente de SonarQube.
+5. Ahora verás issues y sugerencias de SonarQube directamente en el IDE.
+
+**Notas útiles:**
+- Para personalizar archivos o clases excluidas de cobertura en Jacoco, revisa la sección `<excludes>` del `pom.xml`.
+- Si usas otro key, ajusta el comando Maven y el binding en SonarLint.
+- Recuerda destruir el contenedor SonarQube (`docker stop sonarqube && docker rm sonarqube`) si no lo usas.
+
+---
+
+## 🐳 Docker
+
+### Build de imagen
+
+```bash
+docker build -t required-remainder .
+```
+
+### Ejecutar localmente
+
+```bash
+docker run -p 8080:8080 required-remainder
 ```
 
 ---
 
-## ✍️ Autor
+## ☁️ Despliegue en AWS (ECS, ECR, API Gateway)
 
-* **Nombre:** \[Tu Nombre]
-* **Contacto:** \[[tuemail@ejemplo.com](mailto:tuemail@ejemplo.com)]
-* **GitHub:** [https://github.com/tu\_usuario](https://github.com/josmejia2401)
+El despliegue de este microservicio en la nube de AWS (utilizando ECS Fargate, ECR y API Gateway) está completamente automatizado mediante infraestructura como código (IaC) usando Terraform.
+
+### 📂 Infraestructura lista para producción
+
+Toda la configuración necesaria (VPC, ECR, ECS, roles, subredes, security groups, API Gateway, etc.) se encuentra en el repositorio:
+
+- [**required-remainder-infra**](https://github.com/josmejia2401/required-remainder-infra)
+
+### 🚀 Pasos básicos de despliegue
+
+1. **Clona el repositorio de infraestructura:**
+
+    ```bash
+    git clone https://github.com/josmejia2401/required-remainder-infra.git
+    cd required-remainder-infra
+    ```
+
+2. **Revisa y ajusta variables en `variables.tf` según tus necesidades (región, nombre de proyecto, etc.)**
+
+3. **Inicializa y aplica Terraform:**
+
+    ```bash
+    terraform init
+    terraform plan
+    terraform apply
+    ```
+
+4. **Construye y sube tu imagen Docker al ECR creado por Terraform:**
+
+    ```bash
+    # Login en ECR
+    aws ecr get-login-password --region <REGION> | docker login --username AWS --password-stdin <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com
+
+    # Construye la imagen
+    docker build -t required-remainder .
+
+    # Etiqueta y sube al ECR creado por Terraform
+    docker tag required-remainder:latest <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/required-remainder:latest
+    docker push <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/required-remainder:latest
+    ```
+
+5. **Actualiza el servicio ECS para usar la nueva imagen si es necesario (desde AWS Console o ajustando Terraform).**
+
+6. **Accede a tu API desde el endpoint de API Gateway público (se muestra en los outputs de Terraform).**
 
 ---
 
-## 📝 Licencia
+**Consulta el [README del repositorio de infraestructura](https://github.com/josmejia2401/required-remainder-infra/blob/main/README.md) para una guía detallada y personalizada.**
 
-MIT. Ver [LICENSE](LICENSE).
+---
+
+## 📝 Buenas prácticas y recomendaciones
+
+- Cumple con principios SOLID y arquitectura hexagonal.
+- Control global de errores con `@RestControllerAdvice`.
+- Validaciones automáticas con `@Valid`.
+- Logs estratégicos en controllers y services usando SLF4J (`@Slf4j`).
+- Excluye archivos generados/temporales usando el `.gitignore` recomendado.
+
+---
+
+## 🟢 Recursos útiles
+
+- [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/)
+- [springdoc-openapi](https://springdoc.org/)
+- [SonarQube](https://www.sonarqube.org/)
+- [Jacoco](https://www.jacoco.org/jacoco/trunk/doc/maven.html)
+- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [Docker Docs](https://docs.docker.com/)
+
+---
+
+## 👤 Autor
+
+- **José Mejía** - [josmejia2401@gmail.com](mailto:josmejia.2401@gmail.com)
 
 ---

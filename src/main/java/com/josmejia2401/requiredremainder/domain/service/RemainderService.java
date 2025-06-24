@@ -1,6 +1,7 @@
 package com.josmejia2401.requiredremainder.domain.service;
 
 import com.josmejia2401.requiredremainder.domain.port.RemainderPort;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
  * @see RemainderPort
  * @see <a href="https://codeforces.com/problemset/problem/1374/A">Codeforces 1374A - Required Remainder</a>
  */
+@Slf4j
 public class RemainderService implements RemainderPort {
 
     /**
@@ -38,7 +40,10 @@ public class RemainderService implements RemainderPort {
      */
     @Override
     public long compute(long x, long y, long n) {
-        return n - (n - y) % x;
+        log.debug("Calculando Required Remainder con x={}, y={}, n={}", x, y, n);
+        long k = n - (n - y) % x;
+        log.debug("Resultado del cálculo: {}", k);
+        return k;
     }
 }
 
