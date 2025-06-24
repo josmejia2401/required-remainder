@@ -1,5 +1,3 @@
----
-
 ````markdown
 # 📊 Required Remainder - Reto Técnico
 
