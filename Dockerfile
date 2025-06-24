@@ -5,7 +5,7 @@
 # RUN mvn clean package -DskipTests
 
 # Etapa 2: Imagen final optimizada
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
 
 # Directorio de trabajo en el contenedor
 WORKDIR /app

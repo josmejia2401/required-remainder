@@ -181,6 +181,80 @@ Toda la configuración necesaria (VPC, ECR, ECS, roles, subredes, security group
 
 ---
 
+📦 Push directo de imagen Docker a AWS ECR
+Sigue estos pasos para construir y subir tu imagen al repositorio ECR:
+
+bash
+Copiar
+Editar
+* 7. Inicia sesión en ECR
+aws ecr get-login-password --region us-east-1 \
+| docker login --username AWS --password-stdin 233925838033.dkr.ecr.us-east-1.amazonaws.com/required-remainder
+
+* 8. Construye y sube tu imagen directamente a ECR (build multiplataforma para ECS/Fargate)
+docker buildx build --platform linux/amd64 \
+-t 233925838033.dkr.ecr.us-east-1.amazonaws.com/required-remainder:v6 --push .
+
+Esto construirá la imagen compatible con AWS ECS Fargate y la subirá automáticamente.
+
+---
+¡Por supuesto! Aquí tienes un bloque **listo para agregar a tu README**, dejando claro cómo probar el microservicio y accediendo a los recursos clave, incluyendo **un ejemplo de request**.
+
+---
+
+## 🌐 Endpoints disponibles en el backend
+
+Tu microservicio Spring Boot expone los siguientes recursos (cuando accedes directo al contenedor o desde API Gateway configurado como proxy):
+
+* **Procesar batch (POST):**
+  `http://3.81.228.233:8080/api/required-remainder/batch`
+* **OpenAPI JSON:**
+  `http://3.81.228.233:8080/v3/api-docs`
+* **Swagger UI:**
+  `http://3.81.228.233:8080/swagger-ui.html`
+
+> ⚠️ *Recuerda: la IP pública puede cambiar cada vez que reinicias el servicio ECS. Si no responde, revisa en AWS cuál es la IP activa.*
+
+---
+
+### 📋 Ejemplo de request a `/api/required-remainder/batch`
+
+#### **Request (POST):**
+
+```bash
+curl -X POST http://3.81.228.233:8080/api/required-remainder/batch \
+  -H "Content-Type: application/json" \
+  -d '[
+        { "x": 7, "y": 5, "n": 12345 }
+      ]'
+```
+
+#### **Body esperado:**
+
+```json
+[
+  {
+    "x": 7,
+    "y": 5,
+    "n": 12345
+  }
+]
+```
+
+#### **Respuesta esperada (ejemplo):**
+
+```json
+[12339]
+```
+
+---
+
+* Para explorar y probar el API con interfaz gráfica, accede a:
+  **Swagger UI:** [http://3.81.228.233:8080/swagger-ui.html](http://3.81.228.233:8080/swagger-ui.html)
+* Para ver la especificación OpenAPI JSON:
+  **OpenAPI:** [http://3.81.228.233:8080/v3/api-docs](http://3.81.228.233:8080/v3/api-docs)
+
+---
 ## 📝 Buenas prácticas y recomendaciones
 
 - Cumple con principios SOLID y arquitectura hexagonal.
