@@ -62,8 +62,8 @@ Se implementa una arquitectura **hexagonal (Ports and Adapters)**:
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/josmejia2401/reto-tecnico-inclusion.git
-   cd reto-tecnico-inclusion
+   git clone https://github.com/josmejia2401/required-remainder.git
+   cd required-remainder
 ````
 
 2. Compila y ejecuta la aplicación:
