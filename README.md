@@ -212,8 +212,6 @@ Tu microservicio Spring Boot expone los siguientes recursos (cuando accedes dire
 * **Swagger UI:**
   `http://3.81.228.233:8080/swagger-ui.html`
 
-> ⚠️ *Recuerda: la IP pública puede cambiar cada vez que reinicias el servicio ECS. Si no responde, revisa en AWS cuál es la IP activa.*
-
 ---
 
 ### 📋 Ejemplo de request a `/api/required-remainder/batch`
