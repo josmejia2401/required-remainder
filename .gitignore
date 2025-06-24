@@ -1,0 +1,71 @@
+# Compilados de Java
+*.class
+
+# Directorios de compilación Maven/Gradle
+/target/
+/build/
+
+# Archivos de log
+*.log
+
+# Archivos de configuración del IDE (IntelliJ IDEA, Eclipse, NetBeans, VS Code)
+.idea/
+*.iml
+*.ipr
+*.iws
+*.vscode/
+.classpath
+.project
+.settings/
+.nb-gradle/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.tmp
+*.swp
+*~
+
+# Archivos de test coverage (Jacoco, Cobertura, etc)
+jacoco.exec
+/coverage/
+coverage-reports/
+*.ec
+
+# Salida de empaquetado
+*.jar
+*.war
+*.ear
+
+# Docker
+docker-compose.override.yml
+docker-compose*.yml
+*.env
+.env
+
+# Archivos de configuración personal
+*.local
+*.sublime-workspace
+*.sublime-project
+
+# Reports
+target/site/
+
+# SonarQube
+/.scannerwork/
+/sonar/
+
+# Archivos de Maven Wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# Otros
+/log/
+*.log.*
+
+# Node (si usas node para frontend)
+node_modules/
+
+# AWS credentials (nunca subir)
+.aws/
