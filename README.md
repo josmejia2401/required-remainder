@@ -198,7 +198,6 @@ docker buildx build --platform linux/amd64 \
 Esto construirá la imagen compatible con AWS ECS Fargate y la subirá automáticamente.
 
 ---
-¡Por supuesto! Aquí tienes un bloque **listo para agregar a tu README**, dejando claro cómo probar el microservicio y accediendo a los recursos clave, incluyendo **un ejemplo de request**.
 
 ---
 
